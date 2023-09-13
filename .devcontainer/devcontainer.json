@@ -1,0 +1,15 @@
+{
+    "build":{
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+				"Atishay-Jain.All-Autocomplete",
+				"esbenp.prettier-vscode",
+				"ms-python.python",
+				"ms-toolsai.jupyter"
+			]
+        }
+    }
+}
