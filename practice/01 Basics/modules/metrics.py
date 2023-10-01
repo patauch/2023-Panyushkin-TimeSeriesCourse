@@ -47,9 +47,16 @@ def norm_ED_distance(ts1, ts2):
 
     norm_ed_dist = 0
 
-    # INSERT YOUR CODE 
+    if len(ts1) != len(ts2):
+        raise ValueError("The two arrays must have the same length.")
+
+    m = len(ts1)
+
+    norm_ed_dist = np.sqrt(abs(2*m * (1 - (np.dot(ts1, ts2) - m * (sum(ts1)/m) * (sum(ts2)/m)) / (
+        m * np.sqrt(sum(ts1**2 - (sum(ts1)/m)**2) / m) * np.sqrt(sum(ts2**2 - (sum(ts2)/m)**2) / m)))))
 
     return norm_ed_dist
+
 
 
 def DTW_distance(ts1, ts2, r=None):
@@ -74,12 +81,12 @@ def DTW_distance(ts1, ts2, r=None):
     """
 
     dtw_dist = 0
-    d = np.zeros([len(ts1), len(ts2)])
-    D = np.full([len(ts1), len(ts2)], np.inf)
+    
+    D = np.full([len(ts1)+1, len(ts2)+1], np.inf)
     D[0,0] = 0
-    for i in range(1, len(ts1)):
-        for j in range(1, len(ts2)):
-          d[i, j] = (ts1[i]-ts2[j])**2
-          D[i, j] = d[i, j] + min(D[i-1, j], D[i, j-1], D[i-1, j-1])
+    for i in range(1, len(ts1)+1):
+        for j in range(1, len(ts2)+1):
+          cost = (ts1[i-1]-ts2[j-1])**2
+          D[i, j] = cost + min(D[i-1, j], D[i, j-1], D[i-1, j-1])
 
     return D[-1, -1]
