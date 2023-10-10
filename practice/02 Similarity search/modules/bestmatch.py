@@ -151,7 +151,11 @@ class NaiveBestMatchFinder(BestMatchFinder):
             excl_zone = int(np.ceil(m / self.excl_zone_denom))
         q_len = len(self.query)
         # INSERT YOUR CODE
-        distances = [DTW_distance(self.query,self.ts_data[e], self.r) for e in range(0, self.ts_data.shape[1])] 
+        if self.normalize:
+            query = z_normalize(self.query)
+        distances = [DTW_distance(z_normalize(self.ts_data[e]) if self.normalize else self.ts_data[e], query, self.r) 
+            for e in range(N)] 
+
         self.bestmatch = self._top_k_match(distances, m, bsf, excl_zone)
 
         return self.bestmatch

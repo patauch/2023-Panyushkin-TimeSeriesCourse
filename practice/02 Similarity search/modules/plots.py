@@ -238,16 +238,19 @@ def plot_bestmatch_results(ts, query, bestmatch_results):
     bestmatch_results : dict 
         The output data found by the best match algorithm.  
     """
-
+    ts_len = ts.shape[0]
     query_len = query.shape[0]
-    best_match = ts[bestmatch_results["index"][0]:bestmatch_results["index"][0]+query_len]
+    n_matches = len(bestmatch_results)
 
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.5, 0.5], subplot_titles=("Query", "Best_match"), horizontal_spacing=0.04)
+    fig = make_subplots(rows=1, cols=2, column_widths=[0.1, 0.9], subplot_titles=("Query", "Best_match"), horizontal_spacing=0.04)
 
     fig.add_trace(go.Scatter(x=np.arange(query_len), y=query, line=dict(color=px.colors.qualitative.Plotly[1])),
                 row=1, col=1)
-    fig.add_trace(go.Scatter(x=np.arange(query_len), y=best_match, line=dict(color=px.colors.qualitative.Plotly[0])),
+    fig.add_trace(go.Scatter(x=np.arange(ts_len), y=ts, line=dict(color=px.colors.qualitative.Plotly[0])),
                 row=1, col=2)
+    for i, start_index in enumerate(bestmatch_results['index']):
+        end_idx = start_index + query_len
+        fig.add_trace(go.Scatter(x=np.arange(start_index, end_idx), y = ts[start_index:end_idx], line = dict(color=px.colors.qualitative.Plotly[1])), row = 1, col=2)
 
     fig.update_annotations(font=dict(size=24, color='black'))
 
