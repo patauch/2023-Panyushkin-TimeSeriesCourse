@@ -189,7 +189,8 @@ class UCR_DTW(BestMatchFinder):
         """
 
         lb_Kim = 0
-
+        
+        lb_kim = ED_distance(subs1[0], subs2[0])+ED_distance(subs1[-1], subs2[-1])
         # INSERT YOUR CODE
         
         return lb_Kim
@@ -217,8 +218,17 @@ class UCR_DTW(BestMatchFinder):
         """
         
         lb_Keogh = 0
-
-        # INSERT YOUR CODE
+        res = []
+        r = int(len(subs1)*r)
+        for i in range(len(subs1)):
+            u = max(subs1[max(0,i-r):min(len(subs1),i+r+1)])
+            l = min(subs1[max(0,i-r):min(len(subs1),i+r+1)])
+            if subs2[i] > u:
+                res.append((subs2[i]-u)**2)
+            elif subs2[i] < l:
+                res.append((subs2[i]-l)**2)
+            else: res.append(0)
+        lb_Keogh = sum(res)
 
         return lb_Keogh
 
@@ -244,8 +254,25 @@ class UCR_DTW(BestMatchFinder):
         self.lb_Kim_num = 0
         self.lb_KeoghQC_num = 0
         self.lb_KeoghCQ_num = 0
-        
-        # INSERT YOUR CODE
+        distances = []
+        norm_query = z_normalize(self.query) if self.normalize else self.query
+        for i in range(N):
+            subseq = z_normalize(self.ts_data[i]) if self.normalize else self.ts_data[i]
+            if self._LB_Keogh(norm_query, subseq, self.r) < bsf:
+                self.lb_KeoghQC_num += 1   
+            if self._LB_Keogh(subseq, norm_query, self.r) < bsf:
+                self.lb_KeoghQC_num += 1
+            if self._LB_Kim(norm_query, subseq) < bsf:
+                self.lb_Kim_num += 1
+                dist = DTW_distance(norm_query, subseq, self.r)
+                distances.append(dist)
+                if dist < bsf:
+                    bsf = dist
+            
+            
+            
+            
+        self.bestmatch = self._top_k_match(distances, m, bsf, excl_zone)
 
         return {'index' : self.bestmatch['index'],
                 'distance' : self.bestmatch['distance'],
