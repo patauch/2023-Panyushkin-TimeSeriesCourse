@@ -55,7 +55,7 @@ def plot_ts(ts, title='Input Time Series'):
                       legend=dict(font=dict(size=20, color='black'))
                       )
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
 
 
 
@@ -140,7 +140,7 @@ def plot_motifs(mp, top_k_motifs):
                       paper_bgcolor='rgba(0,0,0,0)', 
                       height=1300)
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
 
 
 def plot_discords(mp, top_k_discords):
@@ -200,7 +200,7 @@ def plot_discords(mp, top_k_discords):
                       plot_bgcolor="rgba(0,0,0,0)",
                       paper_bgcolor='rgba(0,0,0,0)')
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
 
 
 def plot_segmentation(mp, threshold):
@@ -249,4 +249,4 @@ def plot_segmentation(mp, threshold):
                       plot_bgcolor="rgba(0,0,0,0)",
                       paper_bgcolor='rgba(0,0,0,0)', height=700)
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
